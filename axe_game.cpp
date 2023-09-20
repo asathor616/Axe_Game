@@ -2,7 +2,7 @@
 int main()
 {
     // window dimensions
-    int width{700};
+    int width{800};
     int height{450};
     InitWindow(width, height, "Axe Game");
 
@@ -25,10 +25,12 @@ int main()
     int r_axe_x{axe_x + axe_length};
     int u_axe_y{axe_y};
     int b_axe_y{axe_y + axe_length};
-
     // direction is used in the game logic to move the axe
-    int direction{10};
+    int axe_direction_y{10};
+    int axe_direction_x{-10};
 
+    //start the game button
+    bool start_game{false};
     // Collision conditions
     bool collision_with_axe = 
                             (b_axe_y >= u_circle_y) &&
@@ -41,7 +43,16 @@ int main()
     {
         BeginDrawing();
         ClearBackground(WHITE);
-
+          if (!start_game)
+        {
+            DrawText("Press SPACE to play the game", 200, 225, 20, RED);
+            if (IsKeyDown(KEY_SPACE))
+            {
+                start_game = true;
+            }
+        }
+        else
+        {
         if (collision_with_axe)
         {
         DrawText("Game Over!", 400, 200, 20, RED);
@@ -70,10 +81,15 @@ int main()
             DrawRectangle(axe_x, axe_y, axe_length, axe_length, RED);
 
             // move the axe
-            axe_y += direction;
+            axe_y += axe_direction_y;
+            axe_x -= axe_direction_x;
             if (axe_y > height || axe_y < 0)
             {
-                direction = -direction;
+                axe_direction_y = -axe_direction_y;
+            }
+            if (axe_x > width || axe_x < 0)
+            {
+                axe_direction_x = -axe_direction_x;
             }
 
             if (IsKeyDown(KEY_D) && circle_x < width)
@@ -84,7 +100,16 @@ int main()
             {
                 circle_x -= 10;
             }   
+              if (IsKeyDown(KEY_S) && circle_y < height)
+            {
+                circle_y += 10;
+            }
+            if (IsKeyDown(KEY_W) && circle_y > 0)
+            {
+                circle_y -= 10;
+            }  
             // Game logic ends
+        }
         }
         EndDrawing();
     }
